@@ -1,0 +1,43 @@
+# In this example the top-level configuration is a [`flake-parts`](https://flake.parts) one.
+# Therefore, every Nix file (other than this) is a flake-parts module.
+{
+  # Declares flake inputs
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    import-tree = {
+      url = "github:vic/import-tree";
+    };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+    outputs =
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; }
+      # Imports all of the top-level modules (the files under `./modules`)
+      (inputs.import-tree ./modules);
+}
+
+
+
