@@ -31,6 +31,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent = {
+      url = "github:0xrsydn/nix-hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs"; 
+    };
   };
     outputs =
     inputs:

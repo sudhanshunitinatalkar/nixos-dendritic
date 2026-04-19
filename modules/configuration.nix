@@ -1,7 +1,6 @@
-# ./modules/hosts/cosmos.nix
 { ... }:
 let
-  cosmos = { pkgs, config, ... }: {
+  cosmos = { pkgs, ... }: {
     nix.settings = {
       experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
       trusted-users = [ "root" "sudha" ];
@@ -61,12 +60,4 @@ in
       { networking.hostName = "cosmoslaptop"; }
     ];
   };
-
-  # ==========================================
-  # EXAMPLE: Future ARM Server Deployment
-  # ==========================================
-  # configurations.nixos."caravan-server".module = universalOsConfig;
-  # configurations.nixos."caravan-server".module = {
-  #   networking.hostName = "caravan-server";
-  # };
 }
