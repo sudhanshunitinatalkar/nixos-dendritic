@@ -26,7 +26,8 @@ let
       nil
       cloudflared 
       cachix 
-      python3
+      python3 
+      zed-editor
     ];
 
     # Standard Home Manager syntax for Git identity
