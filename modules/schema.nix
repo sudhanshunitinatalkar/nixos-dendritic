@@ -1,8 +1,5 @@
 { lib, config, inputs, ... }:
 {
-  # ---------------------------------------------------------
-  # 1. THE SCHEMA 
-  # ---------------------------------------------------------
   options.configurations.nixos = lib.mkOption {
     type = lib.types.lazyAttrsOf (
       lib.types.submodule {
@@ -26,10 +23,6 @@
       }
     );
   };
-
-  # ---------------------------------------------------------
-  # 2. THE BUILDERS 
-  # ---------------------------------------------------------
   config.flake = {
     # Build NixOS Systems
     nixosConfigurations = lib.flip lib.mapAttrs config.configurations.nixos (

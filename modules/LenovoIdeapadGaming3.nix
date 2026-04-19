@@ -2,7 +2,6 @@
 {
   # We push this entire hardware + disk definition into the cosmoslaptop bucket
   configurations.nixos."cosmoslaptop".module = { config, modulesPath, ... }: {
-    
     # 1. DISKO LAYOUT (1GB EFI + Remaining EXT4)
     # This replaces the need for manual 'fileSystems' entries or UUIDs.
     disko.devices = {

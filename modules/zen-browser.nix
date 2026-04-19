@@ -1,9 +1,11 @@
 { inputs, ... }:
-{
-  configurations.home."sudha@cosmoslaptop".module = { pkgs, ... }: {
-    home.packages = [
-      # Access the zen-browser flake output dynamically based on the system architecture
+let
+  zen-browser = { pkgs, ... }: {
+      home.packages = [
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
+in
+{
+  configurations.home."sudha@cosmoslaptop".module = zen-browser;
 }

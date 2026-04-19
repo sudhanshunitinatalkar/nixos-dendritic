@@ -1,8 +1,5 @@
 { ... }:
 {
-  # ==========================================
-  # TARGET 1: Cosmos Laptop (Bare Metal AMD + NVIDIA PRIME)
-  # ==========================================
   configurations.nixos."cosmoslaptop".module = { config, ... }: {
     hardware.graphics.enable = true;
     hardware.graphics.enable32Bit = true;
@@ -34,9 +31,6 @@
     };
   };
 
-  # ==========================================
-  # TARGET 2: Cosmos WSL (Windows Driver Passthrough)
-  # ==========================================
 #   configurations.nixos."cosmos-wsl".module = { pkgs, ... }: {
 #     # Let WSL pass through the Windows GPU driver into the container.
 #     wsl.useWindowsDriver = true;
