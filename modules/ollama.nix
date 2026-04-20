@@ -4,10 +4,17 @@ let
   {
     services.ollama = {
       enable = true;
-      package = pkgs.ollama-cuda;
     };
   };
 in
 {
-  configurations.nixos."cosmoslaptop".module = ollama;
+  configurations.nixos."cosmoslaptop".module = {
+    imports = [ 
+      ollama 
+      # Wrap this in the same way!
+      ({ pkgs, ... }: {
+        services.ollama.package = pkgs.ollama-cuda;
+      })
+    ];
+  };
 }

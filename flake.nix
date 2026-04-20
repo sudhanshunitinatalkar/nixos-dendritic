@@ -4,6 +4,7 @@
   # Declares flake inputs
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,9 +33,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hermes-agent = {
-      url = "github:0xrsydn/nix-hermes-agent";
-      inputs.nixpkgs.follows = "nixpkgs"; 
-    };
+          url = "github:NousResearch/hermes-agent"; 
+          inputs.nixpkgs.follows = "nixpkgs"; 
+        };
   };
     outputs =
     inputs:

@@ -9,15 +9,6 @@ let
     nixpkgs.config.allowUnfree = true;
     system.stateVersion = "25.11";
 
-    # Common Boot Settings (EFI)
-    boot = {
-      kernelPackages = pkgs.linuxPackages_latest;
-      loader = {
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-      };
-    };
-
     hardware.bluetooth.enable = true;
 
     networking = {
@@ -44,20 +35,34 @@ let
     };
 
     environment.systemPackages = with pkgs; [
-      tree util-linux vim wget curl git 
-      gptfdisk htop pciutils home-manager
+      tree 
+      util-linux 
+      vim 
+      wget 
+      curl 
+      git 
+      gptfdisk 
+      htop 
+      pciutils 
+      home-manager
     ];
   };
 in
 {
-  # ==========================================
-  # DEPLOYMENT TARGET: Cosmos Laptop
-  # ==========================================
   configurations.nixos."cosmoslaptop".module = {
-    # We use 'imports' to combine the universal function with our static overrides
     imports = [
       cosmos
-      { networking.hostName = "cosmoslaptop"; }
+      ({ pkgs, ... }: { 
+        boot = {
+          binfmt.emulatedSystems = [ "aarch64-linux" ];
+          kernelPackages = pkgs.linuxPackages_latest;
+          loader = {
+            systemd-boot.enable = true;
+            efi.canTouchEfiVariables = true;
+          };
+        };
+        networking.hostName = "cosmoslaptop"; 
+      })
     ];
   };
 }

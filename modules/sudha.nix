@@ -1,6 +1,5 @@
 { ... }:
 let
-  # Define the core identity and CLI tools that Sudha needs everywhere
   sudha = { pkgs, ... }:{
     nixpkgs.config.allowUnfree = true;
     home.username = "sudha";
@@ -27,6 +26,7 @@ let
       python3
       zed-editor
       telegram-desktop
+      espeak-ng
     ];
     programs.git = {
       enable = true;
@@ -38,9 +38,6 @@ let
   };
 in
 {
-  # ==========================================
-  # TARGET 1: Sudha on Cosmos Laptop
-  # ==========================================
   configurations.home."sudha@cosmoslaptop".system = "x86_64-linux";
   configurations.home."sudha@cosmoslaptop".module = sudha;
 
