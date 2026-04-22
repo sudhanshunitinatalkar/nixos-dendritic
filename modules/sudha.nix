@@ -27,6 +27,9 @@ let
       zed-editor
       telegram-desktop
       espeak-ng
+      uv
+      steam-run
+      prusa-slicer
     ];
     programs.git = {
       enable = true;

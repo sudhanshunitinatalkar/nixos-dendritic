@@ -1,5 +1,3 @@
-# In this example the top-level configuration is a [`flake-parts`](https://flake.parts) one.
-# Therefore, every Nix file (other than this) is a flake-parts module.
 {
   # Declares flake inputs
   inputs = {
