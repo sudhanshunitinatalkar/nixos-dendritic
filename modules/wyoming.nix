@@ -21,9 +21,8 @@
               group = "users";
       
               # 1. AUDIO SOURCE (KEEP PAREC)
-              microphone.command = "${pkgs.pulseaudio}/bin/parec --rate=16000 --channels=1 --format=s16le --raw";
-              
-              # 2. ENHANCEMENTS (README recommendation)
+              microphone.command = "${pkgs.pipewire}/bin/pw-record --rate=16000 --channels=1 --format=s16 --raw -";             
+              sound.command = "${pkgs.pipewire}/bin/pw-play --rate=22050 --channels=1 --format=s16 --raw -";              # 2. ENHANCEMENTS (README recommendation)
               # Automatic gain control (0-31 dbFS). [cite: 19, 20]
               microphone.autoGain = 15; 
               # Noise suppression (0-4). [cite: 22]
