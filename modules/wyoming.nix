@@ -1,42 +1,51 @@
 # ./modules/wyoming.nix
 { pkgs, ... }: {
-  configurations.nixos."cosmoslaptop".module = { pkgs, ... }: {
+  configurations.nixos."cosmoslaptop".module = { pkgs, ... }: 
+  let
+    # Native PipeWire greeting using 'pw-play'
+    greetScript = pkgs.writeShellScript "jarvis-greet" ''
+      echo '{"type": "synthesize", "data": {"text": "Yes?"}}' | \
+      ${pkgs.socat}/bin/socat - TCP:127.0.0.1:10200 | \
+      ${pkgs.pipewire}/bin/pw-play --rate=22050 --channels=1 --format=s16 --raw -
+    '';
+  in
+  {
     services.wyoming = {
       openwakeword = {
-              enable = true;
-              uri = "tcp://127.0.0.1:10400";
-              threshold = 0.1;
-              # Added --debug to see the internal search paths
-              extraArgs = [ 
-                "--debug" 
-                # "--preload-model" "ok_nabu" 
-                "--preload-model" "hey_jarvis" 
-              ]; 
-            };
+        enable = true;
+        uri = "tcp://127.0.0.1:10400";
+        threshold = 0.1;
+        # Added --debug to see the internal search paths
+        extraArgs = [ 
+          "--debug" 
+          "--preload-model" "hey_jarvis" 
+        ]; 
+      };
       satellite = {
-              enable = true;
-              name = "cosmos-ear";
-              uri = "tcp://127.0.0.1:10700";
-              user = "sudha";
-              group = "users";
-      
-              # 1. AUDIO SOURCE (KEEP PAREC)
-              microphone.command = "${pkgs.pipewire}/bin/pw-record --rate=16000 --channels=1 --format=s16 --raw -";             
-              sound.command = "${pkgs.pipewire}/bin/pw-play --rate=22050 --channels=1 --format=s16 --raw -";              # 2. ENHANCEMENTS (README recommendation)
-              # Automatic gain control (0-31 dbFS). [cite: 19, 20]
-              microphone.autoGain = 15; 
-              # Noise suppression (0-4). [cite: 22]
-              microphone.noiseSuppression = 2; 
-      
-              # 3. DISABLE VAD (README: Unnecessary for local wake word) 
-              vad.enable = false;
-      
-              extraArgs = [
-                "--wake-uri" "tcp://127.0.0.1:10400"
-                "--wake-word-name" "hey_jarvis"
-                "--mic-volume-multiplier" "2.0"
-              ];
-            };
+        enable = true;
+        name = "cosmos-ear";
+        uri = "tcp://127.0.0.1:10700";
+        user = "sudha";
+        group = "users";
+
+        # 1. AUDIO SOURCE (KEEP PAREC)
+        microphone.command = "${pkgs.pipewire}/bin/pw-record --rate=16000 --channels=1 --format=s16 --raw -";             
+        sound.command = "${pkgs.pipewire}/bin/pw-play --rate=22050 --channels=1 --format=s16 --raw -";              # 2. ENHANCEMENTS (README recommendation)
+        # Automatic gain control (0-31 dbFS). [cite: 19, 20]
+        microphone.autoGain = 15; 
+        # Noise suppression (0-4). [cite: 22]
+        microphone.noiseSuppression = 2; 
+
+        # 3. DISABLE VAD (README: Unnecessary for local wake word) 
+        vad.enable = false;
+
+        extraArgs = [
+          "--wake-uri" "tcp://127.0.0.1:10400"
+          "--wake-word-name" "hey_jarvis"
+          "--mic-volume-multiplier" "2.0"
+          "--detection-command" "${greetScript}"
+        ];
+      };
       
       # Keep STT and TTS as they were [cite: 218-224]
       faster-whisper.servers.stt = {
@@ -46,6 +55,7 @@
         language = "en";
         device = "cpu";
       };
+      
       piper.servers.tts = {
         enable = true;
         uri = "tcp://127.0.0.1:10200";
