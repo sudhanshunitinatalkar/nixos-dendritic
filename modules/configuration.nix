@@ -32,6 +32,10 @@ let
       pipewire = {
         enable = true;
         pulse.enable = true;
+        # ADD THESE THREE LINES:
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        wireplumber.enable = true; # The modern session manager that handles dynamic routing
       };
       openssh.enable = true;
     };

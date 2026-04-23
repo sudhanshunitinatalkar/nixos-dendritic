@@ -30,6 +30,10 @@ let
       uv
       steam-run
       prusa-slicer
+      pulseaudio 
+      alsa-utils
+      pipewire
+      netcat-gnu
     ];
     programs.git = {
       enable = true;
