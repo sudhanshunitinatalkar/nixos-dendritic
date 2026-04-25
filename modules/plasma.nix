@@ -20,6 +20,7 @@ let
       kdePackages.kolourpaint
       kdePackages.ksystemlog
       kdePackages.sddm-kcm
+      kdePackages.ktorrent
       kdiff3
       kdePackages.isoimagewriter
       kdePackages.partitionmanager

@@ -2,12 +2,17 @@
 { pkgs, ... }: {
   configurations.nixos."cosmoslaptop".module = { pkgs, ... }: 
   let
-    # Native PipeWire greeting using 'pw-play'
-    greetScript = pkgs.writeShellScript "jarvis-greet" ''
-      echo '{"type": "synthesize", "data": {"text": "Yes?"}}' | \
-      ${pkgs.socat}/bin/socat - TCP:127.0.0.1:10200 | \
-      ${pkgs.pipewire}/bin/pw-play --rate=22050 --channels=1 --format=s16 --raw -
-    '';
+  # Added a half-second sleep to prevent an asyncio socket collision
+      greetScript = pkgs.writeShellScript "jarvis-greet" ''
+        ${pkgs.coreutils}/bin/sleep 0.5
+        
+        # We put the log back to prove execution happens
+        echo "--- Executing dynamic TTS at $(date) ---" >> /tmp/jarvis_debug.log
+        
+        echo '{"type": "synthesize", "data": {"text": "Yes?"}}' | \
+        ${pkgs.socat}/bin/socat - TCP:127.0.0.1:10200 | \
+        ${pkgs.socat}/bin/socat - TCP:127.0.0.1:10700 2>> /tmp/jarvis_debug.log
+      '';
   in
   {
     services.wyoming = {
@@ -17,8 +22,8 @@
         threshold = 0.1;
         # Added --debug to see the internal search paths
         extraArgs = [ 
-          "--debug" 
           "--preload-model" "hey_jarvis" 
+          "--debug"
         ]; 
       };
       satellite = {
@@ -27,27 +32,20 @@
         uri = "tcp://127.0.0.1:10700";
         user = "sudha";
         group = "users";
-
-        # 1. AUDIO SOURCE (KEEP PAREC)
         microphone.command = "${pkgs.pipewire}/bin/pw-record --rate=16000 --channels=1 --format=s16 --raw -";             
         sound.command = "${pkgs.pipewire}/bin/pw-play --rate=22050 --channels=1 --format=s16 --raw -";              # 2. ENHANCEMENTS (README recommendation)
-        # Automatic gain control (0-31 dbFS). [cite: 19, 20]
         microphone.autoGain = 15; 
-        # Noise suppression (0-4). [cite: 22]
         microphone.noiseSuppression = 2; 
-
-        # 3. DISABLE VAD (README: Unnecessary for local wake word) 
         vad.enable = false;
-
         extraArgs = [
           "--wake-uri" "tcp://127.0.0.1:10400"
           "--wake-word-name" "hey_jarvis"
           "--mic-volume-multiplier" "2.0"
           "--detection-command" "${greetScript}"
+          "--debug"
         ];
       };
       
-      # Keep STT and TTS as they were [cite: 218-224]
       faster-whisper.servers.stt = {
         enable = true;
         uri = "tcp://127.0.0.1:10300";
@@ -60,21 +58,24 @@
         enable = true;
         uri = "tcp://127.0.0.1:10200";
         voice = "en_US-lessac-medium";
+        extraArgs = [ "--debug" ];
       };
     };
 
     # Systemd Overrides for PipeWire Access
     systemd.services.wyoming-satellite = {
-      # This allows the service to find your PipeWire session [cite: 43, 230]
-      environment.XDG_RUNTIME_DIR = "/run/user/1000"; 
-      
+      path = with pkgs; [ socat pipewire alsa-utils coreutils ];
+      environment = {
+        XDG_RUNTIME_DIR = "/run/user/1000";
+        PIPEWIRE_RUNTIME_DIR = "/run/user/1000";
+        PULSE_SERVER = "unix:/run/user/1000/pulse/native";
+      };
       serviceConfig = {
         # We no longer need to force hardware access because we're using a socket
         PrivateDevices = pkgs.lib.mkForce false; 
         DevicePolicy = pkgs.lib.mkForce "auto"; 
-        
-        # This is critical: PipeWire requires access to your user's home/run folders
         ProtectHome = pkgs.lib.mkForce "read-only";
+        SupplementaryGroups = [ "audio" ];
       };
     };
   };

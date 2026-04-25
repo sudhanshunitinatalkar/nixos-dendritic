@@ -1,0 +1,30 @@
+{ ... }:
+let
+  kubernetes = { pkgs, ... }:
+  {
+    services.k3s = {
+      enable = true;
+      role = "server"; # Instructs K3s to run both control plane and worker components
+      extraFlags = toString [
+        "--write-kubeconfig-mode 644" # CRITICAL: Allows non-root users to read the config
+      ];
+    };
+
+    environment.systemPackages = with pkgs; [
+      kubectl         # Standard K8s command line tool
+      k9s             # Vim-style terminal dashboard
+      kubernetes-helm # K8s package manager (needed for standard deployments)
+    ];
+
+    environment.sessionVariables = {
+      # Points your terminal tools directly to the local K3s cluster credentials
+      KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
+    };
+    
+    # Optional but recommended: Open the firewall for K8s internal networking
+    networking.firewall.allowedTCPPorts = [ 6443 ]; # K3s API Server
+  };
+in
+{
+  configurations.nixos."cosmoslaptop".module = kubernetes;
+}

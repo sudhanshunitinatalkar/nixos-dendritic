@@ -38,6 +38,12 @@ let
         wireplumber.enable = true; # The modern session manager that handles dynamic routing
       };
       openssh.enable = true;
+      
+      
+    };
+    
+    virtualisation.docker = {
+      enable = true;
     };
 
     environment.systemPackages = with pkgs; [

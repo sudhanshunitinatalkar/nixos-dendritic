@@ -34,6 +34,8 @@ let
       alsa-utils
       pipewire
       netcat-gnu
+      libreoffice-fresh
+      vscode
     ];
     programs.git = {
       enable = true;
