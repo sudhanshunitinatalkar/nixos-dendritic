@@ -6,7 +6,6 @@ let
       enable = true;
       role = "server"; # Instructs K3s to run both control plane and worker components
       extraFlags = toString [
-        "--write-kubeconfig-mode 644" # CRITICAL: Allows non-root users to read the config
       ];
     };
 
