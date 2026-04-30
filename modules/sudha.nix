@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 let
   sudha = { pkgs, ... }:{
     nixpkgs.config.allowUnfree = true;
@@ -36,6 +36,10 @@ let
       netcat-gnu
       libreoffice-fresh
       vscode
+      unrar
+      affine
+      gh
+      jq
     ];
     programs.git = {
       enable = true;
@@ -47,7 +51,7 @@ let
   };
 in
 {
-  configurations.home."sudha@cosmoslaptop".system = "x86_64-linux";
+  configurations.home."sudha@cosmoslaptop".pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;  
   configurations.home."sudha@cosmoslaptop".module = sudha;
 
   # configurations.home."sudha@cosmos-wsl".system = "x86_64-linux";
