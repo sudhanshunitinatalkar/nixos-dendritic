@@ -38,8 +38,6 @@ let
         wireplumber.enable = true; # The modern session manager that handles dynamic routing
       };
       openssh.enable = true;
-      
-      
     };
     
     virtualisation.docker = {
@@ -74,6 +72,35 @@ in
           };
         };
         networking.hostName = "cosmoslaptop"; 
+      })
+    ];
+  };
+  
+  # Server-specific node definition
+  configurations.nixos."cosmos_server".module = {
+    imports = [
+      cosmos
+      ({ pkgs, ... }: { # 2. ADDED: Added 'config' to the arguments so it can be used below
+        boot = {
+          binfmt.emulatedSystems = [ "aarch64-linux" ];
+          kernelPackages = pkgs.linuxPackages_latest;
+          loader = {
+            grub = {
+              enable = true;
+              efiSupport = false; # Explicitly disabling EFI
+            };
+          };
+        };
+        networking.hostName = "cosmos_server"; 
+        services.avahi = {
+          enable = true;
+          nssmdns4 = true; # Allows software to use Avahi to resolve .local domains
+          publish = {
+            enable = true;
+            addresses = true;
+            workstation = true;
+          };
+        };
       })
     ];
   };

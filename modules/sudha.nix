@@ -1,6 +1,6 @@
 { inputs, ... }:
 let
-  sudha = { pkgs, ... }:{
+  sudha_cli = { pkgs, ... }:{
     nixpkgs.config.allowUnfree = true;
     home.username = "sudha";
     home.homeDirectory = "/home/sudha";
@@ -24,23 +24,17 @@ let
       cloudflared
       cachix
       python3
-      zed-editor
-      telegram-desktop
       espeak-ng
       uv
-      steam-run
-      prusa-slicer
       pulseaudio 
       alsa-utils
       pipewire
       netcat-gnu
-      libreoffice-fresh
-      vscode
       unrar
-      affine
       gh
       jq
     ];
+    
     programs.git = {
       enable = true;
       settings.user = {
@@ -49,11 +43,25 @@ let
       };
     };
   };
+  
+  sudha_gui = { pkgs, ... }:{
+    home.packages = with pkgs; [
+      zed-editor
+      telegram-desktop
+      steam-run
+      prusa-slicer
+      libreoffice-fresh
+      vscode
+      unrar
+      affine
+      vlc
+    ];
+  };
 in
 {
-  configurations.home."sudha@cosmoslaptop".pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;  
-  configurations.home."sudha@cosmoslaptop".module = sudha;
-
-  # configurations.home."sudha@cosmos-wsl".system = "x86_64-linux";
-  # configurations.home."sudha@cosmos-wsl".module = baseHomeConfig;
+  configurations.home."sudha@cosmoslaptop" = {
+    pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;  
+    module = { imports = [ sudha_cli sudha_gui ]; };
+  };  
+  configurations.home."sudha@cosmos_server".module = sudha_cli;
 }

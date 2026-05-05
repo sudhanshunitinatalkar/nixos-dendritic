@@ -13,7 +13,7 @@ in
       ollama 
       # Wrap this in the same way!
       ({ pkgs, ... }: {
-        # services.ollama.package = pkgs.ollama-cuda;
+        services.ollama.package = pkgs.ollama-cuda;
       })
     ];
   };
