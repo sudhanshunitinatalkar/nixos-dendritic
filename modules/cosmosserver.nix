@@ -1,6 +1,6 @@
 { inputs, lib, ... }:
 {
-  configurations.nixos."cosmos_server".module = { config, modulesPath, ... }: {
+  configurations.nixos."cosmosserver".module = { config, modulesPath, ... }: {
     disko.devices = {
       disk = {
         main = {

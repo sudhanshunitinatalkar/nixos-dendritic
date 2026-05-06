@@ -38,6 +38,10 @@ let
         wireplumber.enable = true; # The modern session manager that handles dynamic routing
       };
       openssh.enable = true;
+      avahi = {
+        enable = true;
+        nssmdns4 = true; # Allows the laptop (and all nodes) to resolve .local
+      };
     };
     
     virtualisation.docker = {
@@ -77,7 +81,7 @@ in
   };
   
   # Server-specific node definition
-  configurations.nixos."cosmos_server".module = {
+  configurations.nixos."cosmosserver".module = {
     imports = [
       cosmos
       ({ pkgs, ... }: { # 2. ADDED: Added 'config' to the arguments so it can be used below
@@ -92,7 +96,7 @@ in
             };
           };
         };
-        networking.hostName = "cosmos_server"; 
+        networking.hostName = "cosmosserver"; 
         services.avahi = {
           enable = true;
           nssmdns4 = true; # Allows software to use Avahi to resolve .local domains

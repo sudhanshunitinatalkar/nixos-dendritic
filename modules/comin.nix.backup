@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   # We push the comin deployment service strictly into the server bucket
-  configurations.nixos."cosmos_server".module = { pkgs, ... }: {
+  configurations.nixos."cosmosserver".module = { pkgs, ... }: {
     
     imports = [
       # You must ensure 'comin' is defined in your flake.nix inputs!
