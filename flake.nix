@@ -30,8 +30,12 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    comin = {
+      url = "github:nlewo/comin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-    outputs =
+  outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; }
       # Imports all of the top-level modules (the files under `./modules`)

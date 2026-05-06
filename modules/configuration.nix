@@ -88,6 +88,7 @@ in
             grub = {
               enable = true;
               efiSupport = false; # Explicitly disabling EFI
+              # devices = [ "/dev/sda" ]; # <-- ADD THIS BACK: Tells GRUB to install to the MBR of the 500GB drive
             };
           };
         };
