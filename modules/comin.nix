@@ -8,8 +8,10 @@ let
       enable = true;
       remotes = [
         {
+          name = "origin";
           url = "https://github.com/sudhanshunitinatalkar/nixos-dendritic.git";
-          branches.main.name = "main";
+          # Corrected branches syntax here:
+          branches.main.name = "main"; 
         }
       ];
     };
@@ -18,7 +20,7 @@ let
     environment.systemPackages = [ pkgs.git ];
   };
 
-  # Only putting the server here!
+  # Only targeting the server
   targetHosts = [ "cosmosserver" ]; 
 in
 {
