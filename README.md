@@ -46,3 +46,6 @@ The project uses the `nixos-dendritic` flake, which dictates the build process.
 
 ## Development
 To contribute or modify the system, simply update the relevant module file (e.g., `modules/configuration.nix`) and run the appropriate build command.
+
+
+nixos-rebuild switch --flake .#cosmosserver --target-host sudha@192.168.29.105 --use-remote-sudo
