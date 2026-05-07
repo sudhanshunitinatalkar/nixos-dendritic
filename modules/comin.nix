@@ -8,9 +8,8 @@ let
       enable = true;
       remotes = [
         {
-          name = "origin";
           url = "https://github.com/sudhanshunitinatalkar/nixos-dendritic.git";
-          branches = [ "main" ]; # Make sure this matches your repo (main vs master)
+          branches.main.name = "main";
         }
       ];
     };
