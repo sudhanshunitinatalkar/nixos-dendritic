@@ -6,7 +6,7 @@ let
   };
 
   # 2. Define a list of hosts that should get this module
-  targetHosts = [ "cosmosserver" "cosmoslaptop" ];
+  targetHosts = [ "cosmoslaptop" ];
 in
 {
   # 3. Automatically apply the module to every host in the list!

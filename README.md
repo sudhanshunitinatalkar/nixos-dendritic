@@ -49,3 +49,8 @@ To contribute or modify the system, simply update the relevant module file (e.g.
 
 
 nixos-rebuild switch --flake .#cosmosserver --target-host sudha@192.168.29.105 --use-remote-sudo
+
+
+nixos-rebuild switch --flake .#cosmosserver --target-host sudha@cosmosserver --build-host localhost --sudo --ask-sudo-password
+
+sudo tailscale funnel --bg --https=443 localhost:8001

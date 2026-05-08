@@ -1,6 +1,6 @@
 { inputs, ... }:
 let
-  sudha_cli = { pkgs, ... }:{
+  sudha_cli = { pkgs, lib, ... }:{
     nixpkgs.config.allowUnfree = true;
     home.username = "sudha";
     home.homeDirectory = "/home/sudha";
@@ -33,6 +33,7 @@ let
       unrar
       gh
       jq
+      
     ];
     
     programs.git = {
@@ -44,9 +45,8 @@ let
     };
   };
   
-  sudha_gui = { pkgs, ... }:{
+  sudha_gui = { pkgs, lib, ... }:{
     home.packages = with pkgs; [
-      zed-editor
       telegram-desktop
       steam-run
       prusa-slicer
@@ -55,7 +55,12 @@ let
       unrar
       affine
       vlc
+      google-chrome
     ];
+
+    home.activation.refreshKDEAppMenu = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          /run/current-system/sw/bin/kbuildsycoca6 || true
+        '';
   };
 in
 {

@@ -1,0 +1,39 @@
+{ lib, ... }:
+let
+  cf = { ... }: {
+    cloudflared = 
+    {
+      enable = true;
+      tunnels = 
+      {
+        "22bf1442-e1a0-460e-8af1-96c4e3c83417" = 
+        {
+          credentialsFile = "/home/pbr/.cloudflared/22bf1442-e1a0-460e-8af1-96c4e3c83417.json";
+          ingress = 
+          {
+            "pbrserver.eltros.in" = "ssh://localhost:22";
+          };
+          default = "http_status:404";
+        };
+        "f6a6fb9b-cf80-4d7f-90ad-0af135869b0d" = 
+        {
+          credentialsFile = "/home/pbr/.cloudflared/f6a6fb9b-cf80-4d7f-90ad-0af135869b0d.json";
+          ingress = 
+          {
+            "iot.eltros.in" = "http://localhost:8080";
+            "n8n.eltros.in" = "http://localhost:5678";
+            "diag.eltros.in" = "http://localhost:5000";
+          };
+          default = "http_status:404";
+        };
+      };
+    };
+  };
+
+  targetHosts = [ "cosmosserver" "cosmoslaptop" ];
+in
+{
+  configurations.nixos = lib.genAttrs targetHosts (name: {
+    module = cf;
+  });
+}
