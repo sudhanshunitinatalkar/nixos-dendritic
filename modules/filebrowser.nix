@@ -10,7 +10,7 @@ let
     };
   };
 
-  targetHosts = [ "cosmosserver" "cosmoslaptop" ];
+  targetHosts = [ "cosmosserver" ];
 in
 {
   configurations.nixos = lib.genAttrs targetHosts (name: {

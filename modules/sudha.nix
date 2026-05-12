@@ -56,6 +56,7 @@ let
       affine
       vlc
       google-chrome
+      discord
     ];
 
     home.activation.refreshKDEAppMenu = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

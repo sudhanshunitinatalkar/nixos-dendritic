@@ -59,6 +59,7 @@ let
       htop 
       pciutils 
       home-manager
+      cloudflare
     ];
   };
 in

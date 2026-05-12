@@ -1,6 +1,6 @@
 { inputs, lib, ... }:
-{
-  configurations.nixos."cosmosserver".module = { config, modulesPath, ... }: {
+let
+  disko = { config, modulesPath, ... }: {
     disko.devices = {
       disk = {
         main = {
@@ -40,4 +40,11 @@
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   };
+
+  targetHosts = [ "cosmosserver" ];
+in
+{
+  configurations.nixos = lib.genAttrs targetHosts (name: {
+    module = disko;
+  });
 }

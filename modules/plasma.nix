@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   plasma = { pkgs, ... }:
   {
@@ -35,7 +35,11 @@ let
       NIXOS_OZONE_WL = "1";
     };
   };
+
+  targetHosts = [ "cosmoslaptop" ];
 in
 {
-  configurations.nixos."cosmoslaptop".module = plasma;
+  configurations.nixos = lib.genAttrs targetHosts (name: {
+    module = plasma;
+  });
 }
